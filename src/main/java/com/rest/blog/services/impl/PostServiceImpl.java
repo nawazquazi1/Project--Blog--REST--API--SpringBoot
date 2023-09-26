@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author nawaz
+ */
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -39,21 +42,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto createPost(PostDto postDto, int userId, int categoryId) {
-
         User user = this.userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User ", "User id", userId));
-
         Category category = this.categoryRepo.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "category id ", categoryId));
-
         Post post = this.modelMapper.map(postDto, Post.class);
         post.setImageName("default.png");
         post.setAddedDate(new Date());
         post.setUser(user);
         post.setCategory(category);
-
         Post newPost = this.postRepo.save(post);
-
         return this.modelMapper.map(newPost, PostDto.class);
     }
 
@@ -103,35 +101,26 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getPostsByCategory(int categoryId) {
-
         Category cat = this.categoryRepo.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId));
         List<Post> posts = this.postRepo.findByCategory(cat);
-
-        List<PostDto> postDtos = posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class))
+        return posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class))
                 .collect(Collectors.toList());
-
-        return postDtos;
     }
 
     @Override
     public List<PostDto> getPostsByUser(int userId) {
-
         User user = this.userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User ", "userId ", userId));
         List<Post> posts = this.postRepo.findByUser(user);
-
-        List<PostDto> postDtos = posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class))
+        return posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class))
                 .collect(Collectors.toList());
-
-        return postDtos;
     }
 
     @Override
     public List<PostDto> searchPosts(String keyword) {
         List<Post> posts = this.postRepo.searchByTitle("%" + keyword + "%");
-        List<PostDto> postDtos = posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
-        return postDtos;
+        return posts.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
     }
 
 }

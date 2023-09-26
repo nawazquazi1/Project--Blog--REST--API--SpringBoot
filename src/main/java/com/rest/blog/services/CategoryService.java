@@ -23,7 +23,6 @@ public interface CategoryService {
 	CategoryDto getCategory(int categoryId);
 
 	// get All
-
-	List<CategoryDto> getCategories();
+	List<CategoryDto> getAllCategories();
 
 }

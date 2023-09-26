@@ -43,7 +43,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void deleteCategory(int categoryId) {
-
 		Category cat = this.categoryRepo.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException("Category ", "category id", categoryId));
 		this.categoryRepo.delete(cat);
@@ -58,8 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
 	@Override
-	public List<CategoryDto> getCategories() {
-
+	public List<CategoryDto> getAllCategories() {
 		List<Category> categories = this.categoryRepo.findAll();
 		List<CategoryDto> catDtos = categories.stream().map((cat) -> this.modelMapper.map(cat, CategoryDto.class))
 				.collect(Collectors.toList());
