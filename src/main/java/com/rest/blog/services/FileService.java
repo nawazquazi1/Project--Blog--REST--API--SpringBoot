@@ -5,7 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
+/**
+ * @author nawaz
+ */
 public interface FileService {
 	String uploadImage(String path, MultipartFile file) throws IOException;
 

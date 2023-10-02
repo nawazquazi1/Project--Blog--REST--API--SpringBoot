@@ -4,7 +4,9 @@ import com.rest.blog.payloads.PostDto;
 import com.rest.blog.payloads.PostResponse;
 
 import java.util.List;
-
+/**
+ * @author nawaz
+ */
 public interface PostService {
 
 	//create 

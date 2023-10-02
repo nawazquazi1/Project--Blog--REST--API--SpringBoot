@@ -1,5 +1,8 @@
 package com.rest.blog.config;
 
+/**
+ * @author nawaz
+ */
 public class AppConstants {
 
 	public static final String PAGE_NUMBER = "0";

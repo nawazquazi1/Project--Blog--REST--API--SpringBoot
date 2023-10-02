@@ -1,5 +1,6 @@
 package com.rest.blog.services.impl;
 
+import com.rest.blog.config.AppConstants;
 import com.rest.blog.entities.Role;
 import com.rest.blog.entities.User;
 import com.rest.blog.exceptions.ResourceNotFoundException;
@@ -10,11 +11,14 @@ import com.rest.blog.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+/**
+ * @author nawaz
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -24,8 +28,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-//	@Autowired/
-//	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private RoleRepo roleRepo;
@@ -54,20 +58,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto getUserById(int userId) {
-
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
-
 		return this.userToDto(user);
 	}
 
 	@Override
 	public List<UserDto> getAllUsers() {
-
 		List<User> users = this.userRepo.findAll();
-		List<UserDto> userDtos = users.stream().map(user -> this.userToDto(user)).collect(Collectors.toList());
-
-		return userDtos;
+		return users.stream().map(user -> this.userToDto(user)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -79,38 +78,24 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public User dtoToUser(UserDto userDto) {
-		User user = this.modelMapper.map(userDto, User.class);
-
-		// user.setId(userDto.getId());
-		// user.setName(userDto.getName());
-		// user.setEmail(userDto.getEmail());
-		// user.setAbout(userDto.getAbout());
-		// user.setPassword(userDto.getPassword());
-		return user;
+		return this.modelMapper.map(userDto, User.class);
 	}
 
 	public UserDto userToDto(User user) {
-		UserDto userDto = this.modelMapper.map(user, UserDto.class);
-		return userDto;
+		return this.modelMapper.map(user, UserDto.class);
 	}
 
 	@Override
 	public UserDto registerNewUser(UserDto userDto) {
-
-//		User user = this.modelMapper.map(userDto, User.class);
-//
-//		// encoded the password
-//		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-//
-//		// roles
-//		Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
-//
-//		user.getRoles().add(role);
-//
-//		User newUser = this.userRepo.save(user);
-
-//		return this.modelMapper.map(newUser, UserDto.class);
-		return null;
+		User user = this.modelMapper.map(userDto, User.class);
+		// encoded the password
+		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+		// roles
+		Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+		user.getRoles().add(role);
+		User newUser = this.userRepo.save(user);
+		return this.modelMapper.map(newUser, UserDto.class);
+//		return null;
 	}
 
 }

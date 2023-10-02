@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
+/**
+ * @author nawaz
+ */
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -22,7 +25,6 @@ public class UserController {
 	// POST-create user
 	@PostMapping("/")
 	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
-		System.out.println(userDto+"tgdu");
 		UserDto createUserDto = this.userService.createUser(userDto);
 		return new ResponseEntity<>(createUserDto, HttpStatus.CREATED);
 	}
